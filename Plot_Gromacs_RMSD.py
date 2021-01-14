@@ -18,13 +18,13 @@ import matplotlib.font_manager as font_manager
 
 def parse_arg():
     parser = argparse.ArgumentParser(description='This is a program to plot rmsd as time')
-    parser.add_argument('-infile', dest='infile', help="input dat, this file is from dssp program,do_dssp -s %s.tpr -f %s_fit.xtc -o dssp_%s.xpm -sc scount_%s.xvg -ssdump ssdump_%s.dat -tu ns ", default='ssdump.dat')
+    parser.add_argument('-infile', dest='infile', help="input dat, this file is from gmx rms", default='rmsd.xvg')
     parser.add_argument('-outfile', dest='outfile', help="output file", required=True)
     arg = parser.parse_args()
     return arg.infile, arg.outfile
 
 def plot_rmsd(filename,figout):
-    font_path = '/home/disk2/wdd/msm/calibribold.ttf'
+    font_path = '/data1/ddwang/wdd/calibribold.ttf'
     font_prop = font_manager.FontProperties(fname=font_path, size=24)
     leg_prop = font_manager.FontProperties(fname=font_path, size=17)
     os.system("sed -i 's/^@/#/g' %s " %filename)
