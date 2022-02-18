@@ -79,7 +79,7 @@ def corr_plot(x_mean, y_mean, x_std, y_std, title=None, xlabel=None, ylabel=None
     fig.savefig(outputfile, dpi=fig.dpi,bbox_inched='tight',pad_inches = 3)
     #plt.show()
     
-# csv: exp(nm) fep(kcal/mol) fep_error
+# csv: exp(nM) fep(kcal/mol) fep_error
 data=np.loadtxt('fep_results.csv')
 print(data[:,0])
 x_mean=IC502DG(data[:,0])
