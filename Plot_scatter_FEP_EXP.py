@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 # @Date    : 2021-12-18 14:05:51
-# @Author  : ZYZCJHWDD 
+# @Author  : CJHZYZWDD 
 # @Link    : https://github.com/dongdawn
 # @Version : v1
 import os
@@ -10,6 +10,8 @@ import matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as font_manager
+def IC502DG(IC50):
+    return 8.314*298.15*np.log(IC50 * 10e-9) / 1000 / 4.184
 def rsquared(x, y, degree=1):
     results = {}
     coeffs = np.polyfit(x, y, degree)
@@ -21,19 +23,17 @@ def rsquared(x, y, degree=1):
     sstot = np.sum((y - ybar) ** 2)
     results['determination'] = ssreg / sstot
     return results['determination']
-
 def rmse(a, b):
     cnt = 0
     for i in range(len(a)):
         cnt += (a[i] - b[i]) ** 2
     return np.sqrt(cnt / len(a))
-
 def mae(a, b):
     cnt = 0
     for i in range(len(a)):
         cnt += np.abs(a[i] - b[i])
     return cnt / len(a)
-font_path = '/home/dongdong/wdd/calibribold.ttf'
+font_path = './calibribold.ttf'
 font_prop = font_manager.FontProperties(fname=font_path, size=25)
 title_prop = font_manager.FontProperties(fname=font_path, size=21)
 def corr_plot(x_mean, y_mean, x_std, y_std, title=None, xlabel=None, ylabel=None, outputfile="corr_plot.png"):
@@ -79,11 +79,13 @@ def corr_plot(x_mean, y_mean, x_std, y_std, title=None, xlabel=None, ylabel=None
     fig.savefig(outputfile, dpi=fig.dpi,bbox_inched='tight',pad_inches = 3)
     #plt.show()
     
-
-data=np.loadtxt('fep_results.cs')
-
-x_mean=data[:,0]
-y_mean=data[:,1]
+# csv: exp(nm) fep(kcal/mol) fep_error
+data=np.loadtxt('fep_results.csv')
+print(data[:,0])
+x_mean=IC502DG(data[:,0])
+print(x_mean)
+y_mean=data[:,1]+np.mean(x_mean)
+print(y_mean)
 title = r"N : %d , RMSE : %.2f , R$^2$ : %.2f " % (len(x_mean), rmse(x_mean, y_mean), rsquared(x_mean, y_mean))
 print(rsquared(x_mean, y_mean))
-corr_plot(data[:,0], data[:,1],x_std=None, y_std=data[:,2], title=title, xlabel=r'$\Delta{G_{exp}}$(kcal/mol)', ylabel=r'$\Delta{G_{FEP}}$(kcal/mol)', outputfile="corr_plot.png")
+corr_plot(x_mean, y_mean,x_std=None, y_std=data[:,2], title=title, xlabel=r'$\Delta{G_{exp}}$(kcal/mol)', ylabel=r'$\Delta{G_{FEP}}$(kcal/mol)', outputfile="corr_plot.png")
