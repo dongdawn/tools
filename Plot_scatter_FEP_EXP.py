@@ -11,7 +11,7 @@ matplotlib.use('pdf')
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as font_manager
 def IC502DG(IC50):
-    return 8.314*298.15*np.log(IC50 * 10e-9) / 1000 / 4.184
+    return 8.314*298.15*np.log(IC50 * 1e-9) / 1000 / 4.184
 def rsquared(x, y, degree=1):
     results = {}
     coeffs = np.polyfit(x, y, degree)
